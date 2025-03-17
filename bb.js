@@ -523,7 +523,7 @@ window.addEventListener('load', function() {
         const selectedRadio = radioFields.find(field => field.checked);
         const selectedValue = selectedRadio ? selectedRadio.value : null;
         
-      
+          console.log(selectedValue);
         
         const selectedRadioInput = selectedRadio ? selectedRadio.parentElement.querySelector('.w-radio-input') : null;
         
