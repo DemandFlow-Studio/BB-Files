@@ -3,7 +3,7 @@ window.addEventListener('load', function() {
     // Sound effects using Howler.js
     const sounds = {
         tick: new Howl({
-            src: ['https://files.tryflowdrive.com/org-2f3e4c92-20d9-49d2-be8f-0f3b4d5e98d1/file-2df79aa5-809f-49ab-a58a-103a24f57a1e_Derd-Bomb-15secs.wav'],
+            src: ['https://files.tryflowdrive.com/org-2f3e4c92-20d9-49d2-be8f-0f3b4d5e98d1/file-2bcUsGaqowqwIFrlGW27j_durd-5-sec.wav'],
             volume: 0.5
         }),
         optionSelect: new Howl({
@@ -70,10 +70,10 @@ window.addEventListener('load', function() {
     const originalQuestion = speechBubble.textContent;
 
     // Timer variables
-    let timeLeft = 10000; // Changed from 15000 to 10000 (10 seconds in milliseconds)
+    let timeLeft = 5000; // Changed from 10000 to 5000 (5 seconds in milliseconds)
     let timerInterval;
     let resultTimeout; // For the 5-second delay
-    let lastSecond = 10; // Changed from 15 to 10 to track the last second for tick sound
+    let lastSecond = 5; // Changed from 10 to 5 to track the last second for tick sound
     
     // Animation loading status
     let animationsLoaded = {
@@ -189,7 +189,7 @@ window.addEventListener('load', function() {
 
      // Preload animations
     const animationPaths = {
-        timer: 'https://files.tryflowdrive.com/org-2f3e4c92-20d9-49d2-be8f-0f3b4d5e98d1/file-KY2DUNMZWvqqSKFHDqRK6_durd-10sec.json', // Updated to 10-second animation
+        timer: 'https://files.tryflowdrive.com/org-2f3e4c92-20d9-49d2-be8f-0f3b4d5e98d1/file-0Dj7KhvQVH6IehO1p4tb_durd-5-sec-lottie.json', // Updated to 5-second animation
         bomb: 'https://files.tryflowdrive.com/org-2f3e4c92-20d9-49d2-be8f-0f3b4d5e98d1/file-a84abc68-6c9f-40f0-b5e9-623dd4915e30_bomb-explodes-comp-f.json',
         winning: 'https://files.tryflowdrive.com/org-2f3e4c92-20d9-49d2-be8f-0f3b4d5e98d1/file-9f0bdba6-fc5d-4075-b617-7901399d3a51_Durd_Bomb_Diffused-V3.json'
     };
@@ -309,12 +309,12 @@ window.addEventListener('load', function() {
 
     // Function to start the timer
     function startTimer() {
-        // Reset time to 10 seconds (changed from 15 seconds)
-        timeLeft = 10000;
+        // Reset time to 5 seconds (changed from 10 seconds)
+        timeLeft = 5000;
         timerElement.textContent = formatTime(timeLeft);
         
         // Play the ticking sound once at the beginning
-        // We'll let it play through the full 10 seconds naturally
+        // We'll let it play through the full 5 seconds naturally
         playSound('tick');
         
         // Clear any existing interval
@@ -328,7 +328,7 @@ window.addEventListener('load', function() {
             timerElement.textContent = formatTime(timeLeft);
             
             // No need to play tick sound every second anymore
-            // as we're using a single 10-second audio file
+            // as we're using a single 5-second audio file
             
             // Check if time is up
             if (timeLeft <= 0) {
@@ -523,7 +523,7 @@ window.addEventListener('load', function() {
         const selectedRadio = radioFields.find(field => field.checked);
         const selectedValue = selectedRadio ? selectedRadio.value : null;
         
-        
+      
         
         const selectedRadioInput = selectedRadio ? selectedRadio.parentElement.querySelector('.w-radio-input') : null;
         
@@ -870,3 +870,4 @@ window.addEventListener('load', function() {
     // Start observing the document with the configured parameters
     observer.observe(document.body, { childList: true, subtree: true });
 });
+
