@@ -1,4 +1,4 @@
-// Wrap all JavaScript in a window load event listener
+// Wrap all JavaScript in a window load event listener 
 window.addEventListener('load', function() {
     // Sound effects using Howler.js
     const sounds = {
