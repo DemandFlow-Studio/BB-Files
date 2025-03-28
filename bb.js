@@ -481,9 +481,6 @@ window.addEventListener('load', function() {
             // Play option select sound
             playSound('optionSelect');
             
-            // Enable submit button if any option is selected
-            submitButton.disabled = !radioFields.some(field => field.checked);
-            
             // Add active class to clicked radio and inactive to others
             radioFields.forEach(otherField => {
                 const radioInput = otherField.parentElement.querySelector('.w-radio-input');
@@ -497,119 +494,107 @@ window.addEventListener('load', function() {
                     radioInput.classList.remove('active');
                 }
             });
-        });
-    });
-
-    quizForm.addEventListener('submit', function(event) {
-        // Prevent default form submission
-        event.preventDefault();
-        
-        // Disable all radio buttons and submit button immediately
-        radioFields.forEach(field => {
-            field.disabled = true;
-        });
-        submitButton.disabled = true;
-        
-        // Stop the timer
-        clearInterval(timerInterval);
-        
-        // Stop the tick sound if it's still playing
-        sounds.tick.stop();
-        
-        // Clear any existing timeout
-        clearTimeout(resultTimeout);
-
-        // Find the selected radio input directly
-        const selectedRadio = radioFields.find(field => field.checked);
-        const selectedValue = selectedRadio ? selectedRadio.value : null;
-        
-      
-        
-        const selectedRadioInput = selectedRadio ? selectedRadio.parentElement.querySelector('.w-radio-input') : null;
-        
-        // Hide timer animation
-        document.getElementById('15-sec-lottie').style.opacity = '0';
-        if (timerAnimation) {
-            timerAnimation.pause();
-        }
-        
-        // Check if the answer is correct (24)
-        if (selectedValue === '10') {
             
-            // Change speech bubble text for correct answer
-            speechBubble.textContent = "CONGRATS! Access granted  🌈";
+            // NEW: Automatically submit the form when an option is clicked
+            // First disable all radio buttons to prevent multiple submissions
+            radioFields.forEach(radioField => {
+                radioField.disabled = true;
+            });
             
-            // Add green-active class to the correct answer
-            if (selectedRadioInput) {
-                selectedRadioInput.classList.add('green-active');
-            }
+            // Stop the timer
+            clearInterval(timerInterval);
+            
+            // Stop the tick sound if it's still playing
+            sounds.tick.stop();
+            
+            // Clear any existing timeout
+            clearTimeout(resultTimeout);
 
-            let submitBtn = document.querySelector('button[type="submit"]');
-
-            if(submitBtn){
-                submitBtn.classList.add('active');
+            // Get the selected value
+            const selectedValue = field.value;
+            
+            // Get the selected radio input element
+            const selectedRadioInput = field.parentElement.querySelector('.w-radio-input');
+            
+            // Hide timer animation
+            document.getElementById('15-sec-lottie').style.opacity = '0';
+            if (timerAnimation) {
+                timerAnimation.pause();
             }
             
-            // Make sure winning animation is initialized
-            if (!winningAnimation) {
-                initializeWinningAnimation();
-            }
-            
-            // Show and play winning animation
-            document.getElementById('winning-lottie').style.opacity = '1';
-            winningAnimation.goToAndPlay(0, true);
-            
-            // Play win sound
-            const winSoundId = sounds.win.play();
-            
-            // REDUCED: Wait 2.5 seconds before showing won view
-            resultTimeout = setTimeout(() => {
-                // Fade out win sound over 1 second before switching view
-                sounds.win.fade(0.7, 0, 1000, winSoundId);
+            // Check if the answer is correct (10)
+            if (selectedValue === '10') {
+                // Change speech bubble text for correct answer
+                speechBubble.textContent = "CONGRATS! Access granted  🌈";
                 
-                // Show won view, hide quiz view using smooth transition
-                switchView(quizView, wonView);
-                
-                // Initialize and play arrow animation immediately
-                if (!arrowAnimation) {
-                    initializeArrowAnimation();
+                // Add green-active class to the correct answer
+                if (selectedRadioInput) {
+                    selectedRadioInput.classList.add('green-active');
                 }
-                arrowAnimation.goToAndPlay(0, true);
-            }, 3000);
-        } else {
-            
-            // Change speech bubble text for wrong answer
-            speechBubble.textContent = "Aaaaah!!!";
-            
-            // Add red-error class to the selected wrong answer
-            if (selectedRadioInput) {
-                selectedRadioInput.classList.add('red-error');
-            }
-            
-            // Make sure bomb animation is initialized
-            if (!bombAnimation) {
-                initializeBombAnimation();
-            }
-            
-            // Show bomb animation container but delay playing the animation
-            document.getElementById('bomb-lottie').style.opacity = '1';
-            
-            // Play bomb animation
-            bombAnimation.goToAndPlay(0, true);
-            
-            // Play lose sound
-            const loseSoundId = sounds.lose.play();
-            
-            // REDUCED: Wait 2 seconds before showing lose view
-            resultTimeout = setTimeout(() => {
-                // Fade out lose sound over 1 second before switching view
-                sounds.lose.fade(0.7, 0, 1000, loseSoundId);
+
+                // Make sure winning animation is initialized
+                if (!winningAnimation) {
+                    initializeWinningAnimation();
+                }
                 
-                // Show lose view, hide quiz view using smooth transition
-                switchView(quizView, loseView);
-            }, 2000);
-        }
+                // Show and play winning animation
+                document.getElementById('winning-lottie').style.opacity = '1';
+                winningAnimation.goToAndPlay(0, true);
+                
+                // Play win sound
+                const winSoundId = sounds.win.play();
+                
+                // Wait 3 seconds before showing won view
+                resultTimeout = setTimeout(() => {
+                    // Fade out win sound over 1 second before switching view
+                    sounds.win.fade(0.7, 0, 1000, winSoundId);
+                    
+                    // Show won view, hide quiz view using smooth transition
+                    switchView(quizView, wonView);
+                    
+                    // Initialize and play arrow animation immediately
+                    if (!arrowAnimation) {
+                        initializeArrowAnimation();
+                    }
+                    arrowAnimation.goToAndPlay(0, true);
+                }, 3000);
+            } else {
+                // Change speech bubble text for wrong answer
+                speechBubble.textContent = "Aaaaah!!!";
+                
+                // Add red-error class to the selected wrong answer
+                if (selectedRadioInput) {
+                    selectedRadioInput.classList.add('red-error');
+                }
+                
+                // Make sure bomb animation is initialized
+                if (!bombAnimation) {
+                    initializeBombAnimation();
+                }
+                
+                // Show bomb animation container but delay playing the animation
+                document.getElementById('bomb-lottie').style.opacity = '1';
+                
+                // Play bomb animation
+                bombAnimation.goToAndPlay(0, true);
+                
+                // Play lose sound
+                const loseSoundId = sounds.lose.play();
+                
+                // Wait 2 seconds before showing lose view
+                resultTimeout = setTimeout(() => {
+                    // Fade out lose sound over 1 second before switching view
+                    sounds.lose.fade(0.7, 0, 1000, loseSoundId);
+                    
+                    // Show lose view, hide quiz view using smooth transition
+                    switchView(quizView, loseView);
+                }, 2000);
+            }
+        });
     });
+
+    // OPTIONAL: Hide the submit button since it's no longer needed
+    submitButton.style.display = 'none';
 
     // Try again button functionality
     tryAgainButton.addEventListener('click', function(event) {
@@ -870,4 +855,3 @@ window.addEventListener('load', function() {
     // Start observing the document with the configured parameters
     observer.observe(document.body, { childList: true, subtree: true });
 });
-
